@@ -14,7 +14,7 @@
     ],
     "require":{
         "silverstripe/framework": "^3.4",
-        "sunnysideup/ecommerce": "*"
+        "silverstripe/cms": "^3.4"        
     },
     "extra": {
         "installer-name": "cms_edit_link_field"
