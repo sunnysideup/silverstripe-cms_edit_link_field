@@ -30,7 +30,7 @@ composer require sunnysideup/cms_edit_link_field
 ```
 
 ### Configuration
-+
+
 In the `_config` folder, you will find `*.yml.example` file(s) that show options for
 the configuration of this module. We recommend that you:
 
