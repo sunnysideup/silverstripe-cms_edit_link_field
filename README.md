@@ -1,4 +1,4 @@
-# Silverstripe  Module
+# Silverstripe Cms edit link field Module
 [![Build Status](https://travis-ci.org/sunnysideup/silverstripe-silverstripe-cms_edit_link_field.svg?branch=master)](https://travis-ci.org/sunnysideup/silverstripe-silverstripe-cms_edit_link_field)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sunnysideup/silverstripe-silverstripe-cms_edit_link_field/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sunnysideup/silverstripe-silverstripe-cms_edit_link_field/?branch=master)
 [![codecov.io](https://codecov.io/github/sunnysideup/silverstripe-silverstripe-cms_edit_link_field/coverage.svg?branch=master)](https://codecov.io/github/sunnysideup/silverstripe-silverstripe-cms_edit_link_field?branch=master)
