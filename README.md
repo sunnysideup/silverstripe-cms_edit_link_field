@@ -1,12 +1,12 @@
-# Silverstipe silverstripe-cms_edit_link_field Module
-[![Build Status](https://travis-ci.org/sunnysideup/silverstripe-cms_edit_link_field.svg?branch=master)](https://travis-ci.org/sunnysideup/silverstripe-cms_edit_link_field)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sunnysideup/silverstripe-cms_edit_link_field/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sunnysideup/silverstripe-cms_edit_link_field/?branch=master)
-[![codecov.io](https://codecov.io/github/sunnysideup/silverstripe-cms_edit_link_field/coverage.svg?branch=master)](https://codecov.io/github/sunnysideup/silverstripe-cms_edit_link_field?branch=master)
-![helpfulrobot](https://helpfulrobot.io/sunnysideup/cms_edit_link_field/badge)
+# Silverstripe  Module
+[![Build Status](https://travis-ci.org/sunnysideup/silverstripe-silverstripe-cms_edit_link_field.svg?branch=master)](https://travis-ci.org/sunnysideup/silverstripe-silverstripe-cms_edit_link_field)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sunnysideup/silverstripe-silverstripe-cms_edit_link_field/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sunnysideup/silverstripe-silverstripe-cms_edit_link_field/?branch=master)
+[![codecov.io](https://codecov.io/github/sunnysideup/silverstripe-silverstripe-cms_edit_link_field/coverage.svg?branch=master)](https://codecov.io/github/sunnysideup/silverstripe-silverstripe-cms_edit_link_field?branch=master)
+![helpfulrobot](https://helpfulrobot.io/sunnysideup/silverstripe-cms_edit_link_field/badge)
 
-[![Latest Stable Version](https://poser.pugx.org/sunnysideup/cms_edit_link_field/version)](https://packagist.org/packages/sunnysideup/cms_edit_link_field)
-[![License](https://poser.pugx.org/sunnysideup/cms_edit_link_field/license)](https://packagist.org/packages/sunnysideup/cms_edit_link_field)
-[![Monthly Downloads](https://poser.pugx.org/sunnysideup/cms_edit_link_field/d/monthly)](https://packagist.org/packages/sunnysideup/cms_edit_link_field)
+[![Latest Stable Version](https://poser.pugx.org/sunnysideup/silverstripe-cms_edit_link_field/version)](https://packagist.org/packages/sunnysideup/silverstripe-cms_edit_link_field)
+[![License](https://poser.pugx.org/sunnysideup/silverstripe-cms_edit_link_field/license)](https://packagist.org/packages/sunnysideup/silverstripe-cms_edit_link_field)
+[![Monthly Downloads](https://poser.pugx.org/sunnysideup/silverstripe-cms_edit_link_field/d/monthly)](https://packagist.org/packages/sunnysideup/silverstripe-cms_edit_link_field)
 
 
 ## Documentation
