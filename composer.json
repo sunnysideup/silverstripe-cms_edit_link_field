@@ -3,8 +3,9 @@
     "type": "silverstripe-module",
     "description": "Adds 'EDIT IN CMS' link to any object within the Silverstripe CMS",
     "keywords": [
-        "silverstripe",
-        "cms",
+        "Silverstripe-CMS",
+        "CMS",
+        "Silverstripe",
         "CMSEditLink"
     ],
     "license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
@@ -16,8 +17,8 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "^3.4",
-        "silverstripe/cms": "^3.4"
+        "silverstripe/framework": "~3.1",
+        "silverstripe/cms": "~3.1"
     },
     "extra": {
         "installer-name": "cms_edit_link_field"
