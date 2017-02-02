@@ -3,7 +3,19 @@
 
 class CMSEditLinkField extends ReadonlyField
 {
-    protected $linkedObject = '';
+
+    /**
+     * what are we linking to?
+     * @var DataObject
+     */
+    protected $linkedObject = null;
+
+    /**
+     * appendix for field name
+     * @var String
+     */
+    protected $nameAppendix = '_CMSEditLink';
+
 
     /**
      *
@@ -14,18 +26,18 @@ class CMSEditLinkField extends ReadonlyField
      */
     public function __construct($name, $title, $linkedObject, $methodOrVariable = 'getTitle')
     {
-        $name .= '_CMSEditLink';
+        $name .= $this->nameAppendix;
         if ($linkedObject && $linkedObject->exists() && $linkedObject->hasMethod('CMSEditLink')) {
             $this->linkedObject = $linkedObject;
-            if($linkedObject->hasMethod($methodOrVariable)) {
-                $description = $linkedObject->$methodOrVariable();
-            } elseif(isset($linkedObject->$methodOrVariable)) {
-                $description = $linkedObject->$methodOrVariable;
+            if($this->linkedObject->hasMethod($methodOrVariable)) {
+                $description = $this->linkedObject->$methodOrVariable();
+            } elseif(isset($this->linkedObject->$methodOrVariable)) {
+                $description = $this->linkedObject->$methodOrVariable;
             } else {
                 $description = 'ERROR!';
-                user_error($methodOrVariable.' does not exist on '.$linkedObject.' (as method or variable)');
+                user_error($methodOrVariable.' does not exist on '.$this->linkedObject.' (as method or variable)');
             }
-            $content = '<p><a href="'.$linkedObject->CMSEditLink().'">'.$description.'</a></h3>';
+            $content = '<p class="cms-edit-link"><a href="'.$this->linkedObject->CMSEditLink().'">'.Convert::raw2xml($description).'</a></p>';
             $this->dontEscape = true;
 
             return parent::__construct($name, $title, $content);
@@ -33,5 +45,16 @@ class CMSEditLinkField extends ReadonlyField
             return parent::__construct($name, $title);
         }
     }
+
+    /**
+     *
+     *
+     * @param string $s
+     */
+    function setNameAppendix($s)
+    {
+        $this->nameAppendix = $s;
+    }
+
 
 }
