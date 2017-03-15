@@ -15,7 +15,7 @@
 
  * [Developer Docs](docs/en/INDEX.md)
  * [User Guide](docs/en/userguide.md)
- * [API](http://ssmods.com/apis/cms_edit_link_field/docs/en/api/)
+ * [API Docs](http://docs.ssmods.com/sunnysideup/cms_edit_link_field)
 
 ## Requirements
 
