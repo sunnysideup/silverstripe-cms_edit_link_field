@@ -19,49 +19,92 @@ class CMSEditLinkAPI extends Object
      *
      * @return string
      */
-    public static function find_edit_link_for_object($objectOrClassName, $action = null)
+    public static function find_edit_link_for_object($objectOrClassName, $action = null, $modelAdminURLOverwrite = '')
     {
-        if($objectOrClassName instanceof DataObject && $objectOrClassName->exists()) {
-            $modelName = $objectOrClassName->ClassName;
-            $id = $objectOrClassName->ID;
-        } else {
-            $modelName = $objectOrClassName;
-            $objectOrClassName = Injector::inst()->get($modelName);
+        if(is_string($objectOrClassName)) {
+            $modelNameToEdit = $objectOrClassName;
+            $objectToEdit = Injector::inst()->get($modelNameToEdit);
             $id = 0;
+        } else {
+            $modelNameToEdit = $objectOrClassName->ClassName;
+            $objectToEdit = $objectOrClassName;
         }
-        $key = $modelName.'_'.$action;
-        if(!isset(self::$_cache[$key])) {
-            foreach(ClassInfo::subclassesFor('ModelAdmin') as $i => $class) {
-                if($class == 'ModelAdmin') {continue;}
-                if(ClassInfo::classImplements($class, 'TestOnly')) {continue;}
-                $myAdminClassName = $class;
-                $modelAdminclassObject = Injector::inst()->get($myAdminClassName);
-                $models = $modelAdminclassObject->getManagedModels();
-                foreach($models as $key => $model) {
-                    if($key === $modelName || $model === $modelName) {
-                        $myManagerClass = $class;
-                        $myManagerObject = $modelAdminclassObject;
-                        break 2;
+        if($objectToEdit instanceof DataObject) {
+            if($objectToEdit->exists()) {
+                $id = $objectOrClassName->ID;
+            } else {
+                $id = 0;
+            }
+        } else {
+            user_error('$objectOrClassName is not set correctly.', E_USER_NOTICE);
+            return;
+        }
+        if($objectToEdit instanceof Member) {
+            return Controller::join_links(
+                Director::baseURL(),
+                '/admin/security/EditForm/field/Members/item/'.$objectToEdit->ID.'/edit/'
+            );
+        }
+        if($objectToEdit instanceof Group) {
+            return Controller::join_links(
+                Director::baseURL(),
+                '/admin/security/EditForm/field/Groups/item/'.$objectToEdit->ID.'/edit/'
+            );
+        }
+        if($modelAdminURLOverwrite) {
+            $classFound = true;
+        } else {
+            $cachekey = $modelNameToEdit.'_'.$action;
+            $cache = SS_Cache::factory('cms_edit_link_cache');
+            $myAdminClassName = $cache->load($cachekey);
+            if ($myAdminClassName) {
+                $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
+                if($myModelAdminclassObject instanceof ModelAdmin) {
+                    $classFound = true;
+                }
+            }
+            else {
+                $classFound = false;
+                foreach(ClassInfo::subclassesFor('ModelAdmin') as $i => $myAdminClassName) {
+                    if($myAdminClassName == 'ModelAdmin') {continue;}
+                    if(ClassInfo::classImplements($myAdminClassName, 'TestOnly')) {continue;}
+                    $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
+                    $models = $myModelAdminclassObject->getManagedModels();
+                    foreach($models as $key => $model) {
+                        if($key === $modelNameToEdit || (is_string($model) && $model === $modelNameToEdit)) {
+                            $classFound = true;
+                            $cache->save($myAdminClassName, $cachekey);
+
+                            break 2;
+                        }
                     }
                 }
             }
-            if(isset($myManagerClass) && isset($myManagerObject)) {
-                if(!$action) {
-                    $action = $modelName.'/EditForm/field/'.$modelName.'/item/0/';
-                    self::$_cache[$key] = Controller::join_links(
-                        Director::baseURL(),
-                        $myManagerObject->Link($action)
-                    );
-                } else {
-                    return Controller::join_links(
-                        Director::baseURL(),
-                        $myManagerObject->Link($action)
-                    );
-                }
+        }
+        if($classFound) {
+            if($id === 0) {
+                $id = 'new';
             }
+            if(!$action) {
+                $action = $modelNameToEdit.'/EditForm/field/'.$modelNameToEdit.'/item/'.$id.'/';
+            }
+            if($modelAdminURLOverwrite) {
+                $link = '/admin/'.$modelAdminURLOverwrite.'/'.$action;
+            } else {
+                $link = $myModelAdminclassObject->Link($action);
+            }
+            return Controller::join_links(
+                Director::baseURL(),
+                $link
+            );
+        }
+        else {
+            return Controller::join_links(
+                Director::baseURL(),
+                'admin/not-found'
+            );
         }
 
-        return str_replace('item/0/', 'item/'.$id.'/', self::$_cache[$key]);
     }
 
 
