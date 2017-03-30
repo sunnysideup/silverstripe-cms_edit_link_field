@@ -82,6 +82,7 @@ class CMSEditLinkAPI extends Object
             }
         }
         if($classFound) {
+            $modelNameToEdit = $this->sanitiseClassName($modelNameToEdit);
             if($id === 0) {
                 $id = 'new';
             }
@@ -107,5 +108,13 @@ class CMSEditLinkAPI extends Object
 
     }
 
+
+    /**
+     * Sanitise a model class' name for inclusion in a link
+     * @return string
+     */
+    protected static function sanitize_class_name($className) {
+        return str_replace('\\', '-', $className);
+    }
 
 }
