@@ -111,6 +111,8 @@ class CMSEditLinkAPI extends Object
 
     /**
      * Sanitise a model class' name for inclusion in a link
+     * @param string $className
+     * 
      * @return string
      */
     protected static function sanitize_class_name($className) {
