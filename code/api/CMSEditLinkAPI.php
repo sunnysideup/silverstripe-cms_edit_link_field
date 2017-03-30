@@ -82,7 +82,7 @@ class CMSEditLinkAPI extends Object
             }
         }
         if($classFound) {
-            $modelNameToEdit = $this->sanitiseClassName($modelNameToEdit);
+            $modelNameToEdit = self::sanitize_class_name($modelNameToEdit);
             if($id === 0) {
                 $id = 'new';
             }
