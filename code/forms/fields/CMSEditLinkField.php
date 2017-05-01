@@ -1,6 +1,14 @@
 <?php
 
-
+/**
+ * typical usage:
+ * CMSEditLinkField::create(
+ *      $name = 'MyParent',
+ *      $title = 'My Parent',
+ *      $linkedObject = $this->MyParent()
+ * );
+ *
+ */
 class CMSEditLinkField extends ReadonlyField
 {
 
