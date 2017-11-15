@@ -51,31 +51,42 @@ class CMSEditLinkAPI extends Object
                 '/admin/security/EditForm/field/Groups/item/'.$objectToEdit->ID.'/edit/'
             );
         }
+
         if($modelAdminURLOverwrite) {
             $classFound = true;
         } else {
-            $cachekey = $modelNameToEdit.'_'.$action;
-            $cache = SS_Cache::factory('cms_edit_link_cache');
-            $myAdminClassName = $cache->load($cachekey);
-            if ($myAdminClassName) {
-                $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
-                if($myModelAdminclassObject instanceof ModelAdmin) {
-                    $classFound = true;
-                }
-            }
-            else {
-                $classFound = false;
-                foreach(ClassInfo::subclassesFor('ModelAdmin') as $i => $myAdminClassName) {
-                    if($myAdminClassName == 'ModelAdmin') {continue;}
+            $classFound = false;
+            foreach(ClassInfo::subclassesFor('ModelAdmin') as $i => $myAdminClassName) {
+                for($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
+
+                    if($myAdminClassName == 'ModelAdmin') {
+                        continue;
+                    }
                     if(ClassInfo::classImplements($myAdminClassName, 'TestOnly')) {continue;}
                     $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
                     $models = $myModelAdminclassObject->getManagedModels();
-                    foreach($models as $key => $model) {
-                        if($key === $modelNameToEdit || (is_string($model) && $model === $modelNameToEdit)) {
-                            $classFound = true;
-                            $cache->save($myAdminClassName, $cachekey);
 
-                            break 2;
+                    foreach($models as $model => $modelDetails) {
+                        if(is_string($modelDetails)) {
+                            $model = $modelDetails;
+                        }
+                        $childrenForModelBeingManaged = null;
+                        if($includeChildren) {
+                            $childrenForModelBeingManaged = ClassInfo::subclassesFor($model);
+                            if(is_array($childrenForModelBeingManaged)) {
+                                $modelsToSearch = array_reverse($childrenForModelBeingManaged);
+                            }
+                        } else {
+                            $modelsToSearch = [$model];
+                        }
+                        foreach($modelsToSearch as $modelToSearch) {
+                            if($modelToSearch === $modelNameToEdit) {
+                                if($modelNameToEdit !== $model) {
+                                    $modelNameToEdit = $model;
+                                }
+                                $classFound = true;
+                                break 4;
+                            }
                         }
                     }
                 }
@@ -112,7 +123,7 @@ class CMSEditLinkAPI extends Object
     /**
      * Sanitise a model class' name for inclusion in a link
      * @param string $className
-     * 
+     *
      * @return string
      */
     protected static function sanitize_class_name($className) {
