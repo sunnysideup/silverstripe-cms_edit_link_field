@@ -37,9 +37,9 @@ class CMSEditLinkField extends ReadonlyField
         $name .= $this->nameAppendix;
         if ($linkedObject && $linkedObject->exists() && $linkedObject->hasMethod('CMSEditLink')) {
             $this->linkedObject = $linkedObject;
-            if($this->linkedObject->hasMethod($methodOrVariable)) {
+            if ($this->linkedObject->hasMethod($methodOrVariable)) {
                 $description = $this->linkedObject->$methodOrVariable();
-            } elseif(isset($this->linkedObject->$methodOrVariable)) {
+            } elseif (isset($this->linkedObject->$methodOrVariable)) {
                 $description = $this->linkedObject->$methodOrVariable;
             } else {
                 $description = 'ERROR!';
@@ -59,10 +59,8 @@ class CMSEditLinkField extends ReadonlyField
      *
      * @param string $s
      */
-    function setNameAppendix($s)
+    public function setNameAppendix($s)
     {
         $this->nameAppendix = $s;
     }
-
-
 }

@@ -3,7 +3,6 @@
 
 class CMSEditLinkAPI extends Object
 {
-
     private static $_cache = array();
 
     /**
@@ -21,7 +20,7 @@ class CMSEditLinkAPI extends Object
      */
     public static function find_edit_link_for_object($objectOrClassName, $action = null, $modelAdminURLOverwrite = '')
     {
-        if(is_string($objectOrClassName)) {
+        if (is_string($objectOrClassName)) {
             $modelNameToEdit = $objectOrClassName;
             $objectToEdit = Injector::inst()->get($modelNameToEdit);
             $id = 0;
@@ -29,8 +28,8 @@ class CMSEditLinkAPI extends Object
             $modelNameToEdit = $objectOrClassName->ClassName;
             $objectToEdit = $objectOrClassName;
         }
-        if($objectToEdit instanceof DataObject) {
-            if($objectToEdit->exists()) {
+        if ($objectToEdit instanceof DataObject) {
+            if ($objectToEdit->exists()) {
                 $id = $objectOrClassName->ID;
             } else {
                 $id = 0;
@@ -39,49 +38,50 @@ class CMSEditLinkAPI extends Object
             user_error('$objectOrClassName is not set correctly.', E_USER_NOTICE);
             return;
         }
-        if($objectToEdit instanceof Member) {
+        if ($objectToEdit instanceof Member) {
             return Controller::join_links(
                 Director::baseURL(),
                 '/admin/security/EditForm/field/Members/item/'.$objectToEdit->ID.'/edit/'
             );
         }
-        if($objectToEdit instanceof Group) {
+        if ($objectToEdit instanceof Group) {
             return Controller::join_links(
                 Director::baseURL(),
                 '/admin/security/EditForm/field/Groups/item/'.$objectToEdit->ID.'/edit/'
             );
         }
 
-        if($modelAdminURLOverwrite) {
+        if ($modelAdminURLOverwrite) {
             $classFound = true;
         } else {
             $classFound = false;
-            foreach(ClassInfo::subclassesFor('ModelAdmin') as $i => $myAdminClassName) {
-                for($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
-
-                    if($myAdminClassName == 'ModelAdmin') {
+            foreach (ClassInfo::subclassesFor('ModelAdmin') as $i => $myAdminClassName) {
+                for ($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
+                    if ($myAdminClassName == 'ModelAdmin') {
                         continue;
                     }
-                    if(ClassInfo::classImplements($myAdminClassName, 'TestOnly')) {continue;}
+                    if (ClassInfo::classImplements($myAdminClassName, 'TestOnly')) {
+                        continue;
+                    }
                     $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
                     $models = $myModelAdminclassObject->getManagedModels();
 
-                    foreach($models as $model => $modelDetails) {
-                        if(is_string($modelDetails)) {
+                    foreach ($models as $model => $modelDetails) {
+                        if (is_string($modelDetails)) {
                             $model = $modelDetails;
                         }
                         $childrenForModelBeingManaged = null;
-                        if($includeChildren) {
+                        if ($includeChildren) {
                             $childrenForModelBeingManaged = ClassInfo::subclassesFor($model);
-                            if(is_array($childrenForModelBeingManaged)) {
+                            if (is_array($childrenForModelBeingManaged)) {
                                 $modelsToSearch = array_reverse($childrenForModelBeingManaged);
                             }
                         } else {
                             $modelsToSearch = [$model];
                         }
-                        foreach($modelsToSearch as $modelToSearch) {
-                            if($modelToSearch === $modelNameToEdit) {
-                                if($modelNameToEdit !== $model) {
+                        foreach ($modelsToSearch as $modelToSearch) {
+                            if ($modelToSearch === $modelNameToEdit) {
+                                if ($modelNameToEdit !== $model) {
                                     $modelNameToEdit = $model;
                                 }
                                 $classFound = true;
@@ -92,15 +92,15 @@ class CMSEditLinkAPI extends Object
                 }
             }
         }
-        if($classFound) {
+        if ($classFound) {
             $modelNameToEdit = self::sanitize_class_name($modelNameToEdit);
-            if($id === 0) {
+            if ($id === 0) {
                 $id = 'new';
             }
-            if(!$action) {
+            if (!$action) {
                 $action = $modelNameToEdit.'/EditForm/field/'.$modelNameToEdit.'/item/'.$id.'/';
             }
-            if($modelAdminURLOverwrite) {
+            if ($modelAdminURLOverwrite) {
                 $link = '/admin/'.$modelAdminURLOverwrite.'/'.$action;
             } else {
                 $link = $myModelAdminclassObject->Link($action);
@@ -109,14 +109,12 @@ class CMSEditLinkAPI extends Object
                 Director::baseURL(),
                 $link
             );
-        }
-        else {
+        } else {
             return Controller::join_links(
                 Director::baseURL(),
                 'admin/not-found'
             );
         }
-
     }
 
 
@@ -126,8 +124,8 @@ class CMSEditLinkAPI extends Object
      *
      * @return string
      */
-    protected static function sanitize_class_name($className) {
+    protected static function sanitize_class_name($className)
+    {
         return str_replace('\\', '-', $className);
     }
-
 }
