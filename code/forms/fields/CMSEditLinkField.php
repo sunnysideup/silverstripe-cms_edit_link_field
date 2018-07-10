@@ -50,7 +50,7 @@ class CMSEditLinkField extends ReadonlyField
 
             return parent::__construct($name, $title, $content);
         } else {
-            return parent::__construct($name, $title);
+            return parent::__construct($name, $title, $content = _t('CMSEditLinkField.NONE', '(none)'));
         }
     }
 
