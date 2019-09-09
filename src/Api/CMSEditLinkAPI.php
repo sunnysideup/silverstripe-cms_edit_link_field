@@ -2,14 +2,25 @@
 
 namespace Sunnysideup\CmsEditLinkField\Api;
 
-use ViewableData;
-use Injector;
-use DataObject;
-use Member;
-use Controller;
-use Director;
-use Group;
-use ClassInfo;
+
+
+
+
+
+
+
+
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\Member;
+use SilverStripe\Control\Director;
+use SilverStripe\Control\Controller;
+use SilverStripe\Security\Group;
+use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\View\ViewableData;
+
 
 
 
@@ -76,12 +87,12 @@ class CMSEditLinkAPI extends ViewableData
             $classFound = true;
         } else {
             $classFound = false;
-            foreach (ClassInfo::subclassesFor('ModelAdmin') as $i => $myAdminClassName) {
+            foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $i => $myAdminClassName) {
                 for ($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
-                    if ($myAdminClassName == 'ModelAdmin') {
+                    if ($myAdminClassName == ModelAdmin::class) {
                         continue;
                     }
-                    if (ClassInfo::classImplements($myAdminClassName, 'TestOnly')) {
+                    if (ClassInfo::classImplements($myAdminClassName, TestOnly::class)) {
                         continue;
                     }
                     $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
