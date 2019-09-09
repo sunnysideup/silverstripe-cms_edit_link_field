@@ -1,9 +1,29 @@
 <?php
 
+namespace Sunnysideup\CmsEditLinkField\Api;
 
-class CMSEditLinkAPI extends Object
+use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\Director;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\Group;
+use SilverStripe\Security\Member;
+use SilverStripe\View\ViewableData;
+
+/**
+ * ### @@@@ START REPLACEMENT @@@@ ###
+ * WHY: upgrade to SS4
+ * OLD:  extends Object (ignore case)
+ * NEW:  extends ViewableData (COMPLEX)
+ * EXP: This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable
+ * ### @@@@ STOP REPLACEMENT @@@@ ###
+ */
+class CMSEditLinkAPI extends ViewableData
 {
-    private static $_cache = array();
+    private static $_cache = [];
 
     /**
      * common usage ...
@@ -41,13 +61,13 @@ class CMSEditLinkAPI extends Object
         if ($objectToEdit instanceof Member) {
             return Controller::join_links(
                 Director::baseURL(),
-                '/admin/security/EditForm/field/Members/item/'.$objectToEdit->ID.'/edit/'
+                '/admin/security/EditForm/field/Members/item/' . $objectToEdit->ID . '/edit/'
             );
         }
         if ($objectToEdit instanceof Group) {
             return Controller::join_links(
                 Director::baseURL(),
-                '/admin/security/EditForm/field/Groups/item/'.$objectToEdit->ID.'/edit/'
+                '/admin/security/EditForm/field/Groups/item/' . $objectToEdit->ID . '/edit/'
             );
         }
 
@@ -55,12 +75,12 @@ class CMSEditLinkAPI extends Object
             $classFound = true;
         } else {
             $classFound = false;
-            foreach (ClassInfo::subclassesFor('ModelAdmin') as $i => $myAdminClassName) {
+            foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $i => $myAdminClassName) {
                 for ($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
-                    if ($myAdminClassName == 'ModelAdmin') {
+                    if ($myAdminClassName === ModelAdmin::class) {
                         continue;
                     }
-                    if (ClassInfo::classImplements($myAdminClassName, 'TestOnly')) {
+                    if (ClassInfo::classImplements($myAdminClassName, TestOnly::class)) {
                         continue;
                     }
                     $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
@@ -97,11 +117,11 @@ class CMSEditLinkAPI extends Object
             if ($id === 0) {
                 $id = 'new';
             }
-            if (!$action) {
-                $action = $modelNameToEdit.'/EditForm/field/'.$modelNameToEdit.'/item/'.$id.'/';
+            if (! $action) {
+                $action = $modelNameToEdit . '/EditForm/field/' . $modelNameToEdit . '/item/' . $id . '/';
             }
             if ($modelAdminURLOverwrite) {
-                $link = '/admin/'.$modelAdminURLOverwrite.'/'.$action;
+                $link = '/admin/' . $modelAdminURLOverwrite . '/' . $action;
             } else {
                 $link = $myModelAdminclassObject->Link($action);
             }
@@ -109,14 +129,12 @@ class CMSEditLinkAPI extends Object
                 Director::baseURL(),
                 $link
             );
-        } else {
-            return Controller::join_links(
+        }
+        return Controller::join_links(
                 Director::baseURL(),
                 'admin/not-found'
             );
-        }
     }
-
 
     /**
      * Sanitise a model class' name for inclusion in a link
@@ -124,8 +142,26 @@ class CMSEditLinkAPI extends Object
      *
      * @return string
      */
+
+    /**
+     * ### @@@@ START REPLACEMENT @@@@ ###
+     * WHY: upgrade to SS4
+     * OLD: $className (case sensitive)
+     * NEW: $className (COMPLEX)
+     * EXP: Check if the class name can still be used as such
+     * ### @@@@ STOP REPLACEMENT @@@@ ###
+     */
     protected static function sanitize_class_name($className)
     {
+
+        /**
+         * ### @@@@ START REPLACEMENT @@@@ ###
+         * WHY: upgrade to SS4
+         * OLD: $className (case sensitive)
+         * NEW: $className (COMPLEX)
+         * EXP: Check if the class name can still be used as such
+         * ### @@@@ STOP REPLACEMENT @@@@ ###
+         */
         return str_replace('\\', '-', $className);
     }
 }

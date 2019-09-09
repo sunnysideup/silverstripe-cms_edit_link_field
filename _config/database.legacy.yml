@@ -1,0 +1,4 @@
+SilverStripe\ORM\DatabaseAdmin:
+  classname_value_remapping:
+    CMSEditLinkField: Sunnysideup\CmsEditLinkField\Forms\Fields\CMSEditLinkField
+    CMSEditLinkAPI: Sunnysideup\CmsEditLinkField\Api\CMSEditLinkAPI

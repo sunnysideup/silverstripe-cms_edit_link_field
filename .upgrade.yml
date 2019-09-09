@@ -1,0 +1,3 @@
+mappings:
+  CMSEditLinkField: Sunnysideup\CmsEditLinkField\Forms\Fields\CMSEditLinkField
+  CMSEditLinkAPI: Sunnysideup\CmsEditLinkField\Api\CMSEditLinkAPI
