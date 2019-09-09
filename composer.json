@@ -1,7 +1,7 @@
 {
     "name": "sunnysideup/cms_edit_link_field",
     "type": "silverstripe-vendormodule",
-    "description": "Adds 'EDIT IN CMS' link to any object within the Silverstripe CMS",
+    "description": "Adds "EDIT IN CMS" link to any object within the Silverstripe CMS",
     "keywords": [
         "Silverstripe-CMS",
         "CMS",
@@ -17,7 +17,20 @@
         }
     ],
     "require": {
-        "silverstripe/recipe-cms": "^4.4"
+        "silverstripe/framework": "~4@stable",
+        "silverstripe/assets": "*",
+        "silverstripe/config": "*",
+        "silverstripe/admin": "*",
+
+        "silverstripe/cms": "*",
+        "silverstripe/asset-admin": "*",
+        "silverstripe/campaign-admin": "*",
+        "silverstripe/versioned-admin": "*",
+        "silverstripe/errorpage": "*",
+        "silverstripe/graphql": "*",
+        "silverstripe/reports": "*",
+        "silverstripe/siteconfig": "*",
+        "silverstripe/versioned": "*"
     },
     "extra": [],
     "autoload": {
