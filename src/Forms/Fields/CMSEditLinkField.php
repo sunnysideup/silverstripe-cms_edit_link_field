@@ -3,7 +3,7 @@
 namespace Sunnysideup\CmsEditLinkField\Forms\Fields;
 
 use SilverStripe\Core\Convert;
-use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Forms\HTMLReadonlyField;
 
 /**
  * typical usage:
@@ -13,7 +13,7 @@ use SilverStripe\Forms\ReadonlyField;
  *      $linkedObject = $this->MyParent()
  * );
  */
-class CMSEditLinkField extends ReadonlyField
+class CMSEditLinkField extends HTMLReadonlyField
 {
     /**
      * what are we linking to?

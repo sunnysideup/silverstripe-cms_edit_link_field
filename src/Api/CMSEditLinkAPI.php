@@ -11,17 +11,8 @@ use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
-use SilverStripe\View\ViewableData;
 
-/**
- * ### @@@@ START REPLACEMENT @@@@ ###
- * WHY: upgrade to SS4
- * OLD:  extends Object (ignore case)
- * NEW:  extends ViewableData (COMPLEX)
- * EXP: This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable
- * ### @@@@ STOP REPLACEMENT @@@@ ###
- */
-class CMSEditLinkAPI extends ViewableData
+class CMSEditLinkAPI
 {
     private static $_cache = [];
 
@@ -33,12 +24,13 @@ class CMSEditLinkAPI extends ViewableData
      *             return CMSEditLinkAPI::find_edit_link_for_object($this, $action);
      *         };
      *
-     * @param  DataObject | string $objectOrClassName
-     * @param  string              $action
+     * @param  DataObject|string $objectOrClassName
+     * @param  string $action
+     * @param  string $modelAdminURLOverwrite - predetermine modeladmin
      *
      * @return string
      */
-    public static function find_edit_link_for_object($objectOrClassName, $action = null, $modelAdminURLOverwrite = '')
+    public static function find_edit_link_for_object($objectOrClassName, $action = null, $modelAdminURLOverwrite = '') : string
     {
         if (is_string($objectOrClassName)) {
             $modelNameToEdit = $objectOrClassName;
@@ -56,7 +48,7 @@ class CMSEditLinkAPI extends ViewableData
             }
         } else {
             user_error('$objectOrClassName is not set correctly.', E_USER_NOTICE);
-            return;
+            return '';
         }
         if ($objectToEdit instanceof Member) {
             return Controller::join_links(
@@ -125,43 +117,21 @@ class CMSEditLinkAPI extends ViewableData
             } else {
                 $link = $myModelAdminclassObject->Link($action);
             }
+
             return Controller::join_links(
                 Director::baseURL(),
                 $link
             );
         }
+
         return Controller::join_links(
-                Director::baseURL(),
-                'admin/not-found'
-            );
+            Director::baseURL(),
+            'admin/not-found'
+        );
     }
 
-    /**
-     * Sanitise a model class' name for inclusion in a link
-     * @param string $className
-     *
-     * @return string
-     */
-
-    /**
-     * ### @@@@ START REPLACEMENT @@@@ ###
-     * WHY: upgrade to SS4
-     * OLD: $className (case sensitive)
-     * NEW: $className (COMPLEX)
-     * EXP: Check if the class name can still be used as such
-     * ### @@@@ STOP REPLACEMENT @@@@ ###
-     */
-    protected static function sanitize_class_name($className)
+    protected static function sanitize_class_name(string $className) : string
     {
-
-        /**
-         * ### @@@@ START REPLACEMENT @@@@ ###
-         * WHY: upgrade to SS4
-         * OLD: $className (case sensitive)
-         * NEW: $className (COMPLEX)
-         * EXP: Check if the class name can still be used as such
-         * ### @@@@ STOP REPLACEMENT @@@@ ###
-         */
         return str_replace('\\', '-', $className);
     }
 }
