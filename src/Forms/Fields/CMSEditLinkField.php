@@ -48,16 +48,6 @@ class CMSEditLinkField extends HTMLReadonlyField
             }
             $content = '<p class="cms-edit-link"><a href="' . $this->linkedObject->CMSEditLink() . '">' . Convert::raw2xml($description) . '</a></p>';
 
-            /**
-             * ### @@@@ START REPLACEMENT @@@@ ###
-             * WHY: upgrade to SS4
-             * OLD: ->dontEscape (case sensitive)
-             * NEW: ->dontEscape (COMPLEX)
-             * EXP: dontEscape is not longer in use for form fields, please use HTMLReadonlyField (or similar) instead.
-             * ### @@@@ STOP REPLACEMENT @@@@ ###
-             */
-            $this->dontEscape = true;
-
             return parent::__construct($name, $title, $content);
         }
         return parent::__construct($name, $title, $content = _t('CMSEditLinkField.NONE', '(none)'));
