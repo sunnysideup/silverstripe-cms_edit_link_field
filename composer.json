@@ -19,7 +19,5 @@
     "require": {
         "silverstripe/recipe-cms": "^4.4"
     },
-    "extra": {
-        "installer-name": "cms_edit_link_field"
-    }
+    "extra": []
 }
