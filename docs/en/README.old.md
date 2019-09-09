@@ -35,7 +35,7 @@ In the `_config` folder, you will find `*.yml.example` file(s) that show options
 the configuration of this module. We recommend that you:
 
   1. copy these `*.yml.example` files into your
-`mysite/_config` folder
+`app/_config` folder
   2. remove the .example extension
   3. delete the lines you not care about, and
   4. adjust the configurations that you would like to use.
