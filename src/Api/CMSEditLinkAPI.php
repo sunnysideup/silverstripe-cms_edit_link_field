@@ -1,5 +1,17 @@
 <?php
 
+namespace Sunnysideup\CmsEditLinkField\Api;
+
+use ViewableData;
+use Injector;
+use DataObject;
+use Member;
+use Controller;
+use Director;
+use Group;
+use ClassInfo;
+
+
 
 
 /**
