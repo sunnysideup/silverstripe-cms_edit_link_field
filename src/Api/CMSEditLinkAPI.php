@@ -23,6 +23,7 @@ class CMSEditLinkAPI
      *         {
      *             return CMSEditLinkAPI::find_edit_link_for_object($this, $action);
      *         };
+     * returns an empty string if not found!
      *
      * @param  DataObject|string $objectOrClassName
      * @param  string $action
@@ -124,10 +125,7 @@ class CMSEditLinkAPI
             );
         }
 
-        return Controller::join_links(
-            Director::baseURL(),
-            'admin/not-found'
-        );
+        return '';
     }
 
     protected static function sanitize_class_name(string $className) : string
