@@ -98,7 +98,7 @@ class CMSEditLinkAPI
         return '';
     }
 
-    protected static function getModelAdmin($modelNameToEdit) : string
+    protected static function getModelAdmin($modelNameToEdit) : array
     {
         $originalModelNameToEdit = $modelNameToEdit;
         if(! isset(self::$_cache[$originalModelNameToEdit])) {
