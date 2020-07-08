@@ -64,9 +64,43 @@ class CMSEditLinkAPI
             );
         }
 
+        $classFound = false;
         if ($modelAdminURLOverwrite) {
             $classFound = true;
         } else {
+            $modelNameToEdit = self::getModelAdmin($modelNameToEdit);
+            if($modelNameToEdit) {
+                $classFound = true;
+            }
+        }
+        if ($classFound) {
+            $modelNameToEdit = self::sanitize_class_name($modelNameToEdit);
+            if ($id === 0) {
+                $id = 'new';
+            }
+            if (! $action) {
+                $action = $modelNameToEdit . '/EditForm/field/' . $modelNameToEdit . '/item/' . $id . '/';
+            }
+            if ($modelAdminURLOverwrite) {
+                $link = '/admin/' . $modelAdminURLOverwrite . '/' . $action;
+            } else {
+                $link = $myModelAdminclassObject->Link($action);
+            }
+
+            return Controller::join_links(
+                Director::baseURL(),
+                $link
+            );
+        }
+
+        return '';
+    }
+
+    protected static function getModelAdmin($modelNameToEdit) : string
+    {
+        $originalModelNameToEdit = $modelNameToEdit;
+        if(! isset(self::$_cache[$originalModelNameToEdit])) {
+            self::$_cache[$originalModelNameToEdit] = '';
             $classFound = false;
             foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $i => $myAdminClassName) {
                 for ($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
@@ -105,27 +139,10 @@ class CMSEditLinkAPI
                 }
             }
         }
-        if ($classFound) {
-            $modelNameToEdit = self::sanitize_class_name($modelNameToEdit);
-            if ($id === 0) {
-                $id = 'new';
-            }
-            if (! $action) {
-                $action = $modelNameToEdit . '/EditForm/field/' . $modelNameToEdit . '/item/' . $id . '/';
-            }
-            if ($modelAdminURLOverwrite) {
-                $link = '/admin/' . $modelAdminURLOverwrite . '/' . $action;
-            } else {
-                $link = $myModelAdminclassObject->Link($action);
-            }
-
-            return Controller::join_links(
-                Director::baseURL(),
-                $link
-            );
+        if($classFound) {
+            self::$_cache[$originalModelNameToEdit] = $modelNameToEdit;
         }
-
-        return '';
+        return self::$_cache[$originalModelNameToEdit];
     }
 
     protected static function sanitize_class_name(string $className) : string
