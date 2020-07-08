@@ -140,12 +140,12 @@ class CMSEditLinkAPI
                     }
                 }
             }
-        }
-        if($classFound && $modelNameToEdit && $myModelAdminclassObject) {
-            self::$_cache[$originalModelNameToEdit] = [
-                'ModelNameToEdit' => $modelNameToEdit,
-                'MyModelAdminclassObject' => $myModelAdminclassObject,
-            ];
+            if($classFound && $modelNameToEdit && $myModelAdminclassObject) {
+                self::$_cache[$originalModelNameToEdit] = [
+                    'ModelNameToEdit' => $modelNameToEdit,
+                    'MyModelAdminclassObject' => $myModelAdminclassObject,
+                ];
+            }
         }
         return self::$_cache[$originalModelNameToEdit];
     }
