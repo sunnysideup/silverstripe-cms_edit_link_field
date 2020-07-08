@@ -68,8 +68,10 @@ class CMSEditLinkAPI
         if ($modelAdminURLOverwrite) {
             $classFound = true;
         } else {
-            $modelNameToEdit = self::getModelAdmin($modelNameToEdit);
-            if($modelNameToEdit) {
+            $modelAdminResults = self::getModelAdmin($modelNameToEdit);
+            if(count($modelAdminResults)) {
+                $modelNameToEdit = $modelAdminResults['ModelNameToEdit'];
+                $myModelAdminclassObject = $modelAdminResults['MyModelAdminclassObject'];
                 $classFound = true;
             }
         }
@@ -100,7 +102,7 @@ class CMSEditLinkAPI
     {
         $originalModelNameToEdit = $modelNameToEdit;
         if(! isset(self::$_cache[$originalModelNameToEdit])) {
-            self::$_cache[$originalModelNameToEdit] = '';
+            self::$_cache[$originalModelNameToEdit] = [];
             $classFound = false;
             foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $i => $myAdminClassName) {
                 for ($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
@@ -140,7 +142,10 @@ class CMSEditLinkAPI
             }
         }
         if($classFound) {
-            self::$_cache[$originalModelNameToEdit] = $modelNameToEdit;
+            self::$_cache[$originalModelNameToEdit] = [
+                'ModelNameToEdit' => $modelNameToEdit,
+                'MyModelAdminclassObject' => $myModelAdminclassObject,
+            ];
         }
         return self::$_cache[$originalModelNameToEdit];
     }
