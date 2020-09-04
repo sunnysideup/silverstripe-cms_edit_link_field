@@ -4,6 +4,7 @@ namespace Sunnysideup\CmsEditLinkField\Forms\Fields;
 
 use SilverStripe\Core\Convert;
 use SilverStripe\Forms\HTMLReadonlyField;
+use SilverStripe\ORM\DataObject;
 
 /**
  * typical usage:
@@ -30,7 +31,7 @@ class CMSEditLinkField extends HTMLReadonlyField
     /**
      * @param string $name                 e.g. MyLinkedObjectID
      * @param string $title                e.g. My Fancy Title
-     * @param DataObject $linkedObject     e.g. $this->MyLinkedObjectID()
+     * @param DataObject $linkedObject     e.g. MyLinkedObject
      * @param string $methodOrVariable     (OPTIONAL) - e.g. MyFullTitle
      */
     public function __construct($name, $title, $linkedObject, $methodOrVariable = 'getTitle')
@@ -50,7 +51,7 @@ class CMSEditLinkField extends HTMLReadonlyField
 
             return parent::__construct($name, $title, $content);
         }
-        return parent::__construct($name, $title, $content = _t('CMSEditLinkField.NONE', '(none)'));
+        parent::__construct($name, $title, $content = _t('CMSEditLinkField.NONE', '(none)'));
     }
 
     /**
