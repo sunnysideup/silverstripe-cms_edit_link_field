@@ -31,7 +31,7 @@ class CMSEditLinkAPI
      *
      * @return string
      */
-    public static function find_edit_link_for_object($objectOrClassName, $action = null, $modelAdminURLOverwrite = '') : string
+    public static function find_edit_link_for_object($objectOrClassName, $action = null, $modelAdminURLOverwrite = ''): string
     {
         if (is_string($objectOrClassName)) {
             $modelNameToEdit = $objectOrClassName;
@@ -69,7 +69,7 @@ class CMSEditLinkAPI
             $classFound = true;
         } else {
             $modelAdminResults = self::getModelAdmin($modelNameToEdit);
-            if(count($modelAdminResults)) {
+            if (count($modelAdminResults)) {
                 $modelNameToEdit = $modelAdminResults['ModelNameToEdit'];
                 $myModelAdminclassObject = $modelAdminResults['MyModelAdminclassObject'];
                 $classFound = true;
@@ -98,13 +98,13 @@ class CMSEditLinkAPI
         return '';
     }
 
-    protected static function getModelAdmin(string $modelNameToEdit) : array
+    protected static function getModelAdmin(string $modelNameToEdit): array
     {
         $originalModelNameToEdit = $modelNameToEdit;
-        if(! isset(self::$_cache[$originalModelNameToEdit])) {
+        if (! isset(self::$_cache[$originalModelNameToEdit])) {
             self::$_cache[$originalModelNameToEdit] = [];
             $classFound = false;
-            foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $i => $myAdminClassName) {
+            foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $myAdminClassName) {
                 for ($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
                     if ($myAdminClassName === ModelAdmin::class) {
                         continue;
@@ -140,7 +140,7 @@ class CMSEditLinkAPI
                     }
                 }
             }
-            if($classFound && $modelNameToEdit && $myModelAdminclassObject) {
+            if ($classFound && $modelNameToEdit && $myModelAdminclassObject) {
                 self::$_cache[$originalModelNameToEdit] = [
                     'ModelNameToEdit' => $modelNameToEdit,
                     'MyModelAdminclassObject' => $myModelAdminclassObject,
@@ -150,7 +150,7 @@ class CMSEditLinkAPI
         return self::$_cache[$originalModelNameToEdit];
     }
 
-    protected static function sanitize_class_name(string $className) : string
+    protected static function sanitize_class_name(string $className): string
     {
         return str_replace('\\', '-', $className);
     }
