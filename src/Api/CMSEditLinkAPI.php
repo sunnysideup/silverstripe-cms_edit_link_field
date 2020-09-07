@@ -63,7 +63,7 @@ class CMSEditLinkAPI
                 '/admin/security/EditForm/field/Groups/item/' . $objectToEdit->ID . '/edit/'
             );
         }
-
+        $myModelAdminclassObject = null;
         $classFound = false;
         if ($modelAdminURLOverwrite) {
             $classFound = true;
@@ -106,6 +106,7 @@ class CMSEditLinkAPI
         if (! isset(self::$_cache[$originalModelNameToEdit])) {
             self::$_cache[$originalModelNameToEdit] = [];
             $classFound = false;
+            $myModelAdminclassObject = null;
             foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $myAdminClassName) {
                 for ($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
                     if ($myAdminClassName === ModelAdmin::class) {
