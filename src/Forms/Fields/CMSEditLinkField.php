@@ -50,8 +50,9 @@ class CMSEditLinkField extends HTMLReadonlyField
             $content = '<p class="cms-edit-link"><a href="' . $this->linkedObject->CMSEditLink() . '">' . Convert::raw2xml($description) . '</a></p>';
 
             parent::__construct($name, $title, $content);
+        } else {
+            parent::__construct($name, $title, $content = _t('CMSEditLinkField.NONE', '(none)'));
         }
-        parent::__construct($name, $title, $content = _t('CMSEditLinkField.NONE', '(none)'));
     }
 
     /**
