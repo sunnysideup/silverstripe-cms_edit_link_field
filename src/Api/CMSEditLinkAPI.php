@@ -85,7 +85,7 @@ class CMSEditLinkAPI
             }
             if ($modelAdminURLOverwrite) {
                 $link = '/admin/' . $modelAdminURLOverwrite . '/' . $action;
-            } elseif($myModelAdminclassObject) {
+            } elseif ($myModelAdminclassObject) {
                 $link = $myModelAdminclassObject->Link($action);
             } else {
                 $link = '';
