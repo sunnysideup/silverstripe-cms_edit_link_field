@@ -59,7 +59,9 @@ modified:	src/Api/CMSEditLinkAPI.php
 +use SilverStripe\Admin\ModelAdmin;
 +use SilverStripe\Core\ClassInfo;
 +use SilverStripe\Dev\TestOnly;
-+use SilverStripe\View\ViewableData;
++use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Injector\Injectable;
 +
 
 
