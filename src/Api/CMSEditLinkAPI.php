@@ -31,7 +31,7 @@ class CMSEditLinkAPI
      *
      * @return string
      */
-    public static function find_edit_link_for_object($objectOrClassName, $action = null, $modelAdminURLOverwrite = ''): string
+    public static function find_edit_link_for_object($objectOrClassName, ?string $action = '', ?string $modelAdminURLOverwrite = ''): string
     {
         if (is_string($objectOrClassName)) {
             $modelNameToEdit = $objectOrClassName;
