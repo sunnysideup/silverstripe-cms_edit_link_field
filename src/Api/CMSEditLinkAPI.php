@@ -27,7 +27,8 @@ class CMSEditLinkAPI
      *
      * @param  DataObject|string $objectOrClassName
      * @param  string $action
-     * @param  string $modelAdminURLOverwrite - predetermine modeladmin
+     * @param  string $modelAdminURLOverwrite - predetermine modeladmin - e.g. SEGMENT as in
+     *                                          /admin/SEGMENT/Foo-Bar/EditForm/field/Foo-Bar/item/517/
      *
      * @return string
      */
