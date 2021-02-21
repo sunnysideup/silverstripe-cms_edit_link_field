@@ -101,44 +101,49 @@ class CMSEditLinkAPI
         return '';
     }
 
-    protected static function getModelAdmin(string $modelNameToEdit): array
+    protected static function getModelAdmin(string $modelNameToEdit, $object): array
     {
         $originalModelNameToEdit = $modelNameToEdit;
         if (! isset(self::$_cache[$originalModelNameToEdit])) {
-            self::$_cache[$originalModelNameToEdit] = [];
-            $classFound = false;
-            $myModelAdminclassObject = null;
-            foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $myAdminClassName) {
-                for ($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
-                    if ($myAdminClassName === ModelAdmin::class) {
-                        continue;
-                    }
-                    if (ClassInfo::classImplements($myAdminClassName, TestOnly::class)) {
-                        continue;
-                    }
-                    $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
-                    $models = $myModelAdminclassObject->getManagedModels();
+            $myAdminClassName = Config::inst()->get($modelNameToEdit, 'primary_model_admin_class');
+            if ($myAdminClassName) {
+                $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
+            } else {
+                self::$_cache[$originalModelNameToEdit] = [];
+                $classFound = false;
+                $myModelAdminclassObject = null;
+                foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $myAdminClassName) {
+                    for ($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
+                        if ($myAdminClassName === ModelAdmin::class) {
+                            continue;
+                        }
+                        if (ClassInfo::classImplements($myAdminClassName, TestOnly::class)) {
+                            continue;
+                        }
+                        $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
+                        $models = $myModelAdminclassObject->getManagedModels();
 
-                    foreach ($models as $model => $modelDetails) {
-                        if (is_string($modelDetails)) {
-                            $model = $modelDetails;
-                        }
-                        $childrenForModelBeingManaged = null;
-                        if ($includeChildren) {
-                            $childrenForModelBeingManaged = ClassInfo::subclassesFor($model);
-                            if (is_array($childrenForModelBeingManaged)) {
-                                $modelsToSearch = array_reverse($childrenForModelBeingManaged);
+                        foreach ($models as $model => $modelDetails) {
+                            if (is_string($modelDetails)) {
+                                $model = $modelDetails;
                             }
-                        } else {
-                            $modelsToSearch = [$model];
-                        }
-                        foreach ($modelsToSearch as $modelToSearch) {
-                            if ($modelToSearch === $modelNameToEdit) {
-                                if ($modelNameToEdit !== $model) {
-                                    $modelNameToEdit = $model;
+                            $childrenForModelBeingManaged = null;
+                            if ($includeChildren) {
+                                $childrenForModelBeingManaged = ClassInfo::subclassesFor($model);
+                                if (is_array($childrenForModelBeingManaged)) {
+                                    $modelsToSearch = array_reverse($childrenForModelBeingManaged);
                                 }
-                                $classFound = true;
-                                break 4;
+                            } else {
+                                $modelsToSearch = [$model];
+                            }
+                            foreach ($modelsToSearch as $modelToSearch) {
+                                if ($modelToSearch === $modelNameToEdit) {
+                                    if ($modelNameToEdit !== $model) {
+                                        $modelNameToEdit = $model;
+                                    }
+                                    $classFound = true;
+                                    break 4;
+                                }
                             }
                         }
                     }
