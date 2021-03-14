@@ -69,7 +69,7 @@ class CMSEditLinkAPI
         if ($modelAdminURLOverwrite) {
             $classFound = true;
         } else {
-            $modelAdminResults = self::getModelAdmin($modelNameToEdit);
+            $modelAdminResults = self::get_model_admin($modelNameToEdit);
             if (count($modelAdminResults)) {
                 $modelNameToEdit = $modelAdminResults['ModelNameToEdit'];
                 $myModelAdminclassObject = $modelAdminResults['MyModelAdminclassObject'];
@@ -101,16 +101,16 @@ class CMSEditLinkAPI
         return '';
     }
 
-    protected static function getModelAdmin(string $modelNameToEdit, $object): array
+    public static function get_model_admin(string $modelNameToEdit): array
     {
         $originalModelNameToEdit = $modelNameToEdit;
         if (! isset(self::$_cache[$originalModelNameToEdit])) {
+            $classFound = false;
             $myAdminClassName = Config::inst()->get($modelNameToEdit, 'primary_model_admin_class');
             if ($myAdminClassName) {
                 $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
             } else {
                 self::$_cache[$originalModelNameToEdit] = [];
-                $classFound = false;
                 $myModelAdminclassObject = null;
                 foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $myAdminClassName) {
                     for ($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
