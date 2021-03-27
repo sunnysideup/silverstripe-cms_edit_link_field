@@ -29,8 +29,6 @@ class CMSEditLinkAPI
      * @param  string $action
      * @param  string $modelAdminURLOverwrite - predetermine modeladmin - e.g. SEGMENT as in
      *                                          /admin/SEGMENT/Foo-Bar/EditForm/field/Foo-Bar/item/517/
-     *
-     * @return string
      */
     public static function find_edit_link_for_object($objectOrClassName, ?string $action = '', ?string $modelAdminURLOverwrite = ''): string
     {

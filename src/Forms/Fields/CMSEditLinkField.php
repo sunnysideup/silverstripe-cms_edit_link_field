@@ -51,9 +51,7 @@ class CMSEditLinkField extends HTMLReadonlyField
         }
     }
 
-    /**
-     * @param string $s
-     */
+
     public function setNameAppendix(string $s)
     {
         $this->nameAppendix = $s;
