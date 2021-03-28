@@ -41,11 +41,7 @@ class CMSEditLinkAPI
             $objectToEdit = $objectOrClassName;
         }
         if ($objectToEdit instanceof DataObject) {
-            if ($objectToEdit->exists()) {
-                $id = $objectOrClassName->ID;
-            } else {
-                $id = 0;
-            }
+            $id = $objectToEdit->exists() ? $objectOrClassName->ID : 0;
         } else {
             user_error('$objectOrClassName is not set correctly.', E_USER_NOTICE);
             return '';
@@ -68,7 +64,7 @@ class CMSEditLinkAPI
             $classFound = true;
         } else {
             $modelAdminResults = self::get_model_admin($modelNameToEdit);
-            if (count($modelAdminResults)) {
+            if (count($modelAdminResults) > 0) {
                 $modelNameToEdit = $modelAdminResults['ModelNameToEdit'];
                 $myModelAdminclassObject = $modelAdminResults['MyModelAdminclassObject'];
                 $classFound = true;
@@ -111,7 +107,7 @@ class CMSEditLinkAPI
                 self::$_cache[$originalModelNameToEdit] = [];
                 $myModelAdminclassObject = null;
                 foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $myAdminClassName) {
-                    for ($includeChildren = 0; $includeChildren < 2; $includeChildren++) {
+                    for ($includeChildren = 0; $includeChildren < 2; ++$includeChildren) {
                         if ($myAdminClassName === ModelAdmin::class) {
                             continue;
                         }
@@ -126,7 +122,7 @@ class CMSEditLinkAPI
                                 $model = $modelDetails;
                             }
                             $childrenForModelBeingManaged = null;
-                            if ($includeChildren) {
+                            if ($includeChildren !== 0) {
                                 $childrenForModelBeingManaged = ClassInfo::subclassesFor($model);
                                 if (is_array($childrenForModelBeingManaged)) {
                                     $modelsToSearch = array_reverse($childrenForModelBeingManaged);

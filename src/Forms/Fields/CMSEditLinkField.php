@@ -21,7 +21,7 @@ class CMSEditLinkField extends HTMLReadonlyField
      * what are we linking to?
      * @var DataObject
      */
-    protected $linkedObject = null;
+    protected $linkedObject;
 
     /**
      * appendix for field name
