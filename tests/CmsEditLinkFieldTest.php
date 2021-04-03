@@ -2,6 +2,10 @@
 
 use SilverStripe\Dev\SapphireTest;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class CmsEditLinkFieldTest extends SapphireTest
 {
     protected $usesDatabase = false;

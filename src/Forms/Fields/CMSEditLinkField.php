@@ -13,27 +13,29 @@ use Sunnysideup\CmsEditLinkField\Api\CMSEditLinkAPI;
  *      $name = 'MyParent',
  *      $title = 'My Parent',
  *      $linkedObject = $this->MyParent()
- * );
+ * );.
  */
 class CMSEditLinkField extends HTMLReadonlyField
 {
     /**
      * what are we linking to?
+     *
      * @var DataObject
      */
     protected $linkedObject;
 
     /**
-     * appendix for field name
+     * appendix for field name.
+     *
      * @var string
      */
     protected $nameAppendix = '_CMSEditLink';
 
     /**
-     * @param string $name                 e.g. MyLinkedObjectID
-     * @param string $title                e.g. My Fancy Title
-     * @param DataObject|null $linkedObject     e.g. MyLinkedObject
-     * @param string $methodOrVariable     (OPTIONAL) - e.g. MyFullTitle
+     * @param string          $name             e.g. MyLinkedObjectID
+     * @param string          $title            e.g. My Fancy Title
+     * @param null|DataObject $linkedObject     e.g. MyLinkedObject
+     * @param string          $methodOrVariable (OPTIONAL) - e.g. MyFullTitle
      */
     public function __construct(string $name, string $title, $linkedObject, ?string $methodOrVariable = 'getTitle')
     {

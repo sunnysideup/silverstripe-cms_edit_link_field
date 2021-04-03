@@ -25,10 +25,10 @@ class CMSEditLinkAPI
      *         };
      * returns an empty string if not found!
      *
-     * @param  DataObject|string $objectOrClassName
-     * @param  string $action
-     * @param  string $modelAdminURLOverwrite - predetermine modeladmin - e.g. SEGMENT as in
-     *                                          /admin/SEGMENT/Foo-Bar/EditForm/field/Foo-Bar/item/517/
+     * @param DataObject|string $objectOrClassName
+     * @param string            $action
+     * @param string            $modelAdminURLOverwrite - predetermine modeladmin - e.g. SEGMENT as in
+     *                                                  /admin/SEGMENT/Foo-Bar/EditForm/field/Foo-Bar/item/517/
      */
     public static function find_edit_link_for_object($objectOrClassName, ?string $action = '', ?string $modelAdminURLOverwrite = ''): string
     {
@@ -44,6 +44,7 @@ class CMSEditLinkAPI
             $id = $objectToEdit->exists() ? $objectOrClassName->ID : 0;
         } else {
             user_error('$objectOrClassName is not set correctly.', E_USER_NOTICE);
+
             return '';
         }
         if ($objectToEdit instanceof Member) {
@@ -72,7 +73,7 @@ class CMSEditLinkAPI
         }
         if ($classFound) {
             $modelNameToEdit = self::sanitize_class_name($modelNameToEdit);
-            if ($id === 0) {
+            if (0 === $id) {
                 $id = 'new';
             }
             if (! $action) {
@@ -108,7 +109,7 @@ class CMSEditLinkAPI
                 $myModelAdminclassObject = null;
                 foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $myAdminClassName) {
                     for ($includeChildren = 0; $includeChildren < 2; ++$includeChildren) {
-                        if ($myAdminClassName === ModelAdmin::class) {
+                        if (ModelAdmin::class === $myAdminClassName) {
                             continue;
                         }
                         if (ClassInfo::classImplements($myAdminClassName, TestOnly::class)) {
@@ -122,7 +123,7 @@ class CMSEditLinkAPI
                                 $model = $modelDetails;
                             }
                             $childrenForModelBeingManaged = null;
-                            if ($includeChildren !== 0) {
+                            if (0 !== $includeChildren) {
                                 $childrenForModelBeingManaged = ClassInfo::subclassesFor($model);
                                 if (is_array($childrenForModelBeingManaged)) {
                                     $modelsToSearch = array_reverse($childrenForModelBeingManaged);
@@ -136,6 +137,7 @@ class CMSEditLinkAPI
                                         $modelNameToEdit = $model;
                                     }
                                     $classFound = true;
+
                                     break 4;
                                 }
                             }
@@ -150,6 +152,7 @@ class CMSEditLinkAPI
                 ];
             }
         }
+
         return self::$_cache[$originalModelNameToEdit];
     }
 
