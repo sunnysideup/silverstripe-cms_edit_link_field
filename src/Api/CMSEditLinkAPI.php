@@ -102,14 +102,16 @@ class CMSEditLinkAPI
         $originalModelNameToEdit = $modelNameToEdit;
         if (! isset(self::$_cache[$originalModelNameToEdit])) {
             $classFound = false;
+            self::$_cache[$originalModelNameToEdit] = [];
             $myAdminClassName = Config::inst()->get($modelNameToEdit, 'primary_model_admin_class');
             if ($myAdminClassName) {
+                $classFound = true;
                 $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
             } else {
                 self::$_cache[$originalModelNameToEdit] = [];
                 $myModelAdminclassObject = null;
                 foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $myAdminClassName) {
-                    for ($includeChildren = 0; $includeChildren < 2; ++$includeChildren) {
+                    for ($includeChildren = 0; $includeChildren < 10; ++$includeChildren) {
                         if (ModelAdmin::class === $myAdminClassName) {
                             continue;
                         }
