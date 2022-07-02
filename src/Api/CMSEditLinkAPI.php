@@ -12,10 +12,21 @@ use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Injector\Injectable;
 
 class CMSEditLinkAPI
 {
-    private static $_cache = [];
+    use Configurable;
+    use Injectable;
+
+    /**
+     * model => link (e.g. my-model-admin)
+     * @var [type]
+     */
+    private static $overwrites = [];
+
+    protected static $_cache = [];
 
     /**
      * common usage ...
@@ -33,6 +44,7 @@ class CMSEditLinkAPI
      */
     public static function find_edit_link_for_object($objectOrClassName, ?string $action = '', ?string $modelAdminURLOverwrite = ''): string
     {
+        $overWrites = Config::inst()->get(self::class, 'overwrites');
         if (is_string($objectOrClassName)) {
             $modelNameToEdit = $objectOrClassName;
             $objectToEdit = Injector::inst()->get($modelNameToEdit);
@@ -40,6 +52,9 @@ class CMSEditLinkAPI
         } else {
             $modelNameToEdit = $objectOrClassName->ClassName;
             $objectToEdit = $objectOrClassName;
+        }
+        if(! $modelAdminURLOverwrite) {
+            $modelAdminURLOverwrite = $overWrites[$objectOrClassName->ClassName] ?? '';
         }
 
         if ($objectToEdit instanceof DataObject) {
