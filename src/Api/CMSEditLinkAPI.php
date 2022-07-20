@@ -7,26 +7,27 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Injector\Injectable;
 
 class CMSEditLinkAPI
 {
     use Configurable;
     use Injectable;
 
+    protected static $_cache = [];
+
     /**
-     * model => link (e.g. my-model-admin)
+     * model => link (e.g. my-model-admin).
+     *
      * @var [type]
      */
     private static $overwrites = [];
-
-    protected static $_cache = [];
 
     /**
      * common usage ...
@@ -53,7 +54,8 @@ class CMSEditLinkAPI
             $modelNameToEdit = $objectOrClassName->ClassName;
             $objectToEdit = $objectOrClassName;
         }
-        if(! $modelAdminURLOverwrite) {
+
+        if (! $modelAdminURLOverwrite) {
             $modelAdminURLOverwrite = $overWrites[$objectOrClassName->ClassName] ?? '';
         }
 
