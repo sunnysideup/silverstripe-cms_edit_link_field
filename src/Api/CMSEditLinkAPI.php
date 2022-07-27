@@ -50,9 +50,11 @@ class CMSEditLinkAPI
             $modelNameToEdit = $objectOrClassName;
             $objectToEdit = Injector::inst()->get($modelNameToEdit);
             $id = 0;
-        } else {
+        } elseif($objectOrClassName instanceof DataObject) {
             $modelNameToEdit = $objectOrClassName->ClassName;
             $objectToEdit = $objectOrClassName;
+        } else {
+            $objectToEdit = null;
         }
 
         if (! $modelAdminURLOverwrite) {
