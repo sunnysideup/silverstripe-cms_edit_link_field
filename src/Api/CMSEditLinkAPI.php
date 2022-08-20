@@ -25,7 +25,7 @@ class CMSEditLinkAPI
     /**
      * model => link (e.g. my-model-admin).
      *
-     * @var [type]
+     * @var array
      */
     private static $overwrites = [];
 
@@ -50,7 +50,7 @@ class CMSEditLinkAPI
             $modelNameToEdit = $objectOrClassName;
             $objectToEdit = Injector::inst()->get($modelNameToEdit);
             $id = 0;
-        } elseif($objectOrClassName instanceof DataObject) {
+        } elseif ($objectOrClassName instanceof DataObject) {
             $modelNameToEdit = $objectOrClassName->ClassName;
             $objectToEdit = $objectOrClassName;
         } else {
