@@ -3,7 +3,7 @@ Create a form field that links to any object:
 CMSEditLinkField::create(
       $fieldName = 'Parent',
       $title = 'Edit my parent',
-      $linkedObject = $this->MyParent()
+      $linkedObject = $this->Parent()
  );
  
  ```
