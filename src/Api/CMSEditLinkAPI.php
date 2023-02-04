@@ -45,21 +45,7 @@ class CMSEditLinkAPI
      */
     public static function find_edit_link_for_object($objectOrClassName, ?string $action = '', ?string $modelAdminURLOverwrite = ''): string
     {
-        $overWrites = Config::inst()->get(self::class, 'overwrites');
-        if (is_string($objectOrClassName)) {
-            $modelNameToEdit = $objectOrClassName;
-            $objectToEdit = Injector::inst()->get($modelNameToEdit);
-            $id = 0;
-        } elseif ($objectOrClassName instanceof DataObject) {
-            $modelNameToEdit = $objectOrClassName->ClassName;
-            $objectToEdit = $objectOrClassName;
-        } else {
-            $objectToEdit = null;
-        }
-
-        if (! $modelAdminURLOverwrite) {
-            $modelAdminURLOverwrite = $overWrites[$objectOrClassName->ClassName] ?? '';
-        }
+        $objectToEdit = self::get_data_object($objectOrClassName);
 
         if ($objectToEdit instanceof DataObject) {
             $id = $objectToEdit->exists() ? $objectOrClassName->ID : 0;
@@ -72,26 +58,33 @@ class CMSEditLinkAPI
         if ($objectToEdit instanceof Member) {
             return Controller::join_links(
                 Director::baseURL(),
-                '/admin/security/EditForm/field/Members/item/' . $objectToEdit->ID . '/edit/'
+                '/admin/security/EditForm/field/Members/item/' . $id . '/edit/'
             );
         }
 
         if ($objectToEdit instanceof Group) {
             return Controller::join_links(
                 Director::baseURL(),
-                '/admin/security/EditForm/field/Groups/item/' . $objectToEdit->ID . '/edit/'
+                '/admin/security/EditForm/field/Groups/item/' . $id . '/edit/'
             );
         }
 
-        $myModelAdminclassObject = null;
+        $overWrites = Config::inst()->get(self::class, 'overwrites');
+
+        if (!$modelAdminURLOverwrite) {
+            $modelAdminURLOverwrite = $overWrites[$objectOrClassName->ClassName] ?? '';
+        }
+
+
+        $MyModelAdminClassObject = null;
         $classFound = false;
         if ($modelAdminURLOverwrite) {
             $classFound = true;
         } else {
-            $modelAdminResults = self::get_model_admin($modelNameToEdit);
+            $modelAdminResults = self::get_model_admin($objectToEdit->ClassName);
             if ([] !== $modelAdminResults) {
                 $modelNameToEdit = $modelAdminResults['ModelNameToEdit'];
-                $myModelAdminclassObject = $modelAdminResults['MyModelAdminclassObject'];
+                $MyModelAdminClassObject = $modelAdminResults['MyModelAdminClassObject'];
                 $classFound = true;
             }
         }
@@ -102,14 +95,18 @@ class CMSEditLinkAPI
                 $id = 'new';
             }
 
-            if (! $action) {
+            if (!$action) {
                 $action = $modelNameToEdit . '/EditForm/field/' . $modelNameToEdit . '/item/' . $id . '/';
             }
 
             if ($modelAdminURLOverwrite) {
                 $link = '/admin/' . $modelAdminURLOverwrite . '/' . $action;
-            } elseif ($myModelAdminclassObject) {
-                $link = $myModelAdminclassObject->Link($action);
+            } elseif ($MyModelAdminClassObject) {
+                if ($id) {
+                    $link = $MyModelAdminClassObject->getCMSEditLinkForManagedDataObject($objectToEdit);
+                } else {
+                    $link = $MyModelAdminClassObject->Link($action);
+                }
             } else {
                 $link = '';
             }
@@ -123,19 +120,34 @@ class CMSEditLinkAPI
         return '';
     }
 
+    /**
+     * @return DataObject|null
+     */
+    protected static function get_data_object($objectOrClassName)
+    {
+        $objectToEdit = null;
+        if (is_string($objectOrClassName)) {
+            $objectToEdit = Injector::inst()->get($objectOrClassName);
+        } elseif ($objectOrClassName instanceof DataObject) {
+            $objectToEdit = $objectOrClassName;
+        }
+
+        return $objectToEdit;
+    }
+
     public static function get_model_admin(string $modelNameToEdit): array
     {
         $originalModelNameToEdit = $modelNameToEdit;
-        if (! isset(self::$_cache[$originalModelNameToEdit])) {
+        if (!isset(self::$_cache[$originalModelNameToEdit])) {
             $classFound = false;
             self::$_cache[$originalModelNameToEdit] = [];
             $myAdminClassName = Config::inst()->get($modelNameToEdit, 'primary_model_admin_class');
             if ($myAdminClassName) {
                 $classFound = true;
-                $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
+                $MyModelAdminClassObject = Injector::inst()->get($myAdminClassName);
             } else {
                 self::$_cache[$originalModelNameToEdit] = [];
-                $myModelAdminclassObject = null;
+                $MyModelAdminClassObject = null;
                 foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $myAdminClassName) {
                     for ($includeChildren = 0; $includeChildren < 10; ++$includeChildren) {
                         if (ModelAdmin::class === $myAdminClassName) {
@@ -146,8 +158,8 @@ class CMSEditLinkAPI
                             continue;
                         }
 
-                        $myModelAdminclassObject = Injector::inst()->get($myAdminClassName);
-                        $models = $myModelAdminclassObject->getManagedModels();
+                        $MyModelAdminClassObject = Injector::inst()->get($myAdminClassName);
+                        $models = $MyModelAdminClassObject->getManagedModels();
 
                         foreach ($models as $model => $modelDetails) {
                             if (is_string($modelDetails)) {
@@ -180,10 +192,10 @@ class CMSEditLinkAPI
                 }
             }
 
-            if ($classFound && $modelNameToEdit && $myModelAdminclassObject) {
+            if ($classFound && $modelNameToEdit && $MyModelAdminClassObject) {
                 self::$_cache[$originalModelNameToEdit] = [
                     'ModelNameToEdit' => $modelNameToEdit,
-                    'MyModelAdminclassObject' => $myModelAdminclassObject,
+                    'MyModelAdminClassObject' => $MyModelAdminClassObject,
                 ];
             }
         }
