@@ -149,7 +149,9 @@ class CMSEditLinkAPI
                 self::$_cache[$originalModelNameToEdit] = [];
                 $MyModelAdminClassObject = null;
                 foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $myAdminClassName) {
-                    for ($includeChildren = 0; $includeChildren < 10; ++$includeChildren) {
+                    $MyModelAdminClassObject = Injector::inst()->get($myAdminClassName);
+                    $models = $MyModelAdminClassObject->getManagedModels();
+                    foreach ([false, true,] as $testSubClasses) {
                         if (ModelAdmin::class === $myAdminClassName) {
                             continue;
                         }
@@ -158,28 +160,28 @@ class CMSEditLinkAPI
                             continue;
                         }
 
-                        $MyModelAdminClassObject = Injector::inst()->get($myAdminClassName);
-                        $models = $MyModelAdminClassObject->getManagedModels();
 
-                        foreach ($models as $model => $modelDetails) {
-                            if (is_string($modelDetails)) {
-                                $model = $modelDetails;
+                        foreach ($models as $modelToTest => $modelToTestDetails) {
+                            if (is_string($modelToTestDetails)) {
+                                $modelToTest = $modelToTestDetails;
                             }
 
-                            $childrenForModelBeingManaged = null;
-                            if (0 !== $includeChildren) {
-                                $childrenForModelBeingManaged = ClassInfo::subclassesFor($model);
-                                if (is_array($childrenForModelBeingManaged)) {
-                                    $modelsToSearch = array_reverse($childrenForModelBeingManaged);
+                            $subClassesForModelBeingManaged = null;
+                            $modelsToSearch = [];
+                            if ($testSubClasses) {
+                                $subClassesForModelBeingManaged = ClassInfo::subclassesFor($modelToTest);
+                                if (is_array($subClassesForModelBeingManaged)) {
+                                    $modelsToSearch = array_reverse($subClassesForModelBeingManaged);
                                 }
                             } else {
-                                $modelsToSearch = [$model];
+                                $modelsToSearch[] = $modelToTest;
                             }
 
                             foreach ($modelsToSearch as $modelToSearch) {
                                 if ($modelToSearch === $modelNameToEdit) {
-                                    if ($modelNameToEdit !== $model) {
-                                        $modelNameToEdit = $model;
+                                    // subclas situation
+                                    if ($modelNameToEdit !== $modelToTest) {
+                                        $modelNameToEdit = $modelToSearch;
                                     }
 
                                     $classFound = true;
