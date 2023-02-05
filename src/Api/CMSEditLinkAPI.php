@@ -149,16 +149,16 @@ class CMSEditLinkAPI
                 self::$_cache[$originalModelNameToEdit] = [];
                 $MyModelAdminClassObject = null;
                 foreach (ClassInfo::subclassesFor(ModelAdmin::class) as $myAdminClassName) {
+                    if (ModelAdmin::class === $myAdminClassName) {
+                        continue;
+                    }
+
+                    if (ClassInfo::classImplements($myAdminClassName, TestOnly::class)) {
+                        continue;
+                    }
                     $MyModelAdminClassObject = Injector::inst()->get($myAdminClassName);
                     $models = $MyModelAdminClassObject->getManagedModels();
                     foreach ([false, true,] as $testSubClasses) {
-                        if (ModelAdmin::class === $myAdminClassName) {
-                            continue;
-                        }
-
-                        if (ClassInfo::classImplements($myAdminClassName, TestOnly::class)) {
-                            continue;
-                        }
 
 
                         foreach ($models as $modelToTest => $modelToTestDetails) {
