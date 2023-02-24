@@ -46,8 +46,8 @@ class CMSEditLinkAPI
     public static function find_edit_link_for_object($objectOrClassName, ?string $action = '', ?string $modelAdminURLOverwrite = ''): string
     {
         $objectToEdit = self::get_data_object($objectOrClassName);
-
         if ($objectToEdit instanceof DataObject) {
+            $modelNameToEdit = $objectToEdit->ClassName;
             $id = $objectToEdit->exists() ? $objectOrClassName->ID : 0;
         } else {
             user_error('$objectOrClassName is not set correctly.', E_USER_NOTICE);
