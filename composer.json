@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "^4.0",
+        "silverstripe/framework": "^4.0 || ^5.0",
         "silverstripe/assets": "*",
         "silverstripe/config": "*",
         "silverstripe/admin": "*",
