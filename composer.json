@@ -17,20 +17,7 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "^4.0 || ^5.0",
-        "silverstripe/assets": "*",
-        "silverstripe/config": "*",
-        "silverstripe/admin": "*",
-
-        "silverstripe/cms": "*",
-        "silverstripe/asset-admin": "*",
-        "silverstripe/campaign-admin": "*",
-        "silverstripe/versioned-admin": "*",
-        "silverstripe/errorpage": "*",
-        "silverstripe/graphql": "*",
-        "silverstripe/reports": "*",
-        "silverstripe/siteconfig": "*",
-        "silverstripe/versioned": "*"
+        "silverstripe/recipe_cms": "^4.0 || ^5.0"
     },
     "extra": [],
     "autoload": {
