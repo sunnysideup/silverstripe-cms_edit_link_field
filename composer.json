@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "silverstripe/recipe_cms": "^4.0 || ^5.0"
+        "silverstripe/recipe-cms": "^4.0 || ^5.0"
     },
     "extra": [],
     "autoload": {
