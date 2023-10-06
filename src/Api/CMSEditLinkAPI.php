@@ -58,14 +58,14 @@ class CMSEditLinkAPI
         if ($objectToEdit instanceof Member) {
             return Controller::join_links(
                 Director::baseURL(),
-                '/admin/security/EditForm/field/Members/item/' . $id . '/edit/'
+                '/admin/security/users/EditForm/field/users/item/' . $id . '/edit/'
             );
         }
 
         if ($objectToEdit instanceof Group) {
             return Controller::join_links(
                 Director::baseURL(),
-                '/admin/security/EditForm/field/Groups/item/' . $id . '/edit/'
+                '/admin/security/groups/EditForm/field/groups/item/' . $id . '/edit/'
             );
         }
 
