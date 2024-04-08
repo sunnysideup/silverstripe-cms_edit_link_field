@@ -29,6 +29,13 @@ class CMSEditLinkAPI
      */
     private static $overwrites = [];
 
+    public static function find_add_link_for_object($objectOrClassName, ?string $action = '', ?string $modelAdminURLOverwrite = ''): string
+    {
+        $link = self::find_edit_link_for_object($objectOrClassName, $action, $modelAdminURLOverwrite);
+        return preg_replace('#/item/\d+#', '/item/new', $link);
+    }
+
+
     /**
      * common usage ...
      *
@@ -95,15 +102,11 @@ class CMSEditLinkAPI
                 $id = 'new';
             }
 
-            if (!$action) {
-                $action = $modelNameToEdit . '/EditForm/field/' . $modelNameToEdit . '/item/' . $id . '/';
-            }
-
             if ($modelAdminURLOverwrite) {
                 $link = '/admin/' . $modelAdminURLOverwrite . '/' . $action;
             } elseif ($MyModelAdminClassObject) {
                 if ($id) {
-                    $link = $MyModelAdminClassObject->getCMSEditLinkForManagedDataObject($objectToEdit);
+                    $link = $MyModelAdminClassObject->getLinkForModelClass($objectToEdit);
                 } else {
                     $link = $MyModelAdminClassObject->Link($action);
                 }
