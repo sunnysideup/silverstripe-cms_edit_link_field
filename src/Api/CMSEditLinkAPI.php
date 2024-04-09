@@ -78,7 +78,7 @@ class CMSEditLinkAPI
 
         $overWrites = Config::inst()->get(self::class, 'overwrites');
 
-        if (!$modelAdminURLOverwrite) {
+        if (!$modelAdminURLOverwrite && $objectOrClassName instanceof DataObject) {
             $modelAdminURLOverwrite = $overWrites[$objectOrClassName->ClassName] ?? '';
         }
 
