@@ -105,8 +105,11 @@ class CMSEditLinkAPI
             if ($modelAdminURLOverwrite) {
                 $link = '/admin/' . $modelAdminURLOverwrite . '/' . $action;
             } elseif ($MyModelAdminClassObject) {
-                if ($id) {
-                    $link = $MyModelAdminClassObject->getLinkForModelClass($objectToEdit);
+                if ($id === 'new') {
+                    $link = $MyModelAdminClassObject->getCMSEditLinkForManagedDataObject($objectToEdit);
+                    $link = str_replace('item/0/edit', 'item/new', $link);
+                } elseif ($id) {
+                    $link = $MyModelAdminClassObject->getCMSEditLinkForManagedDataObject($objectToEdit);
                 } else {
                     $link = $MyModelAdminClassObject->Link($action);
                 }
