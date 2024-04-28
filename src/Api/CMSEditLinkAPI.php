@@ -3,6 +3,7 @@
 namespace Sunnysideup\CmsEditLinkField\Api;
 
 use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\Admin\SecurityAdmin;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
@@ -62,17 +63,10 @@ class CMSEditLinkAPI
             return '';
         }
 
-        if ($objectToEdit instanceof Member) {
+        if ($objectToEdit instanceof Member || $objectToEdit instanceof Group) {
             return Controller::join_links(
                 Director::baseURL(),
-                '/admin/security/users/EditForm/field/users/item/' . $id . '/edit/'
-            );
-        }
-
-        if ($objectToEdit instanceof Group) {
-            return Controller::join_links(
-                Director::baseURL(),
-                '/admin/security/groups/EditForm/field/groups/item/' . $id . '/edit/'
+                Injector::inst()->get(SecurityAdmin::class)->getCMSEditLinkForManagedDataObject($objectToEdit)
             );
         }
 
