@@ -36,7 +36,6 @@ class CMSEditLinkAPI
         return preg_replace('#/item/\d+#', '/item/new', $link);
     }
 
-
     /**
      * common usage ...
      *
@@ -47,7 +46,6 @@ class CMSEditLinkAPI
      * returns an empty string if not found!
      *
      * @param DataObject|string $objectOrClassName
-     * @param string            $action
      * @param string            $modelAdminURLOverwrite - predetermine modeladmin - e.g. SEGMENT as in
      *                                                  /admin/SEGMENT/Foo-Bar/EditForm/field/Foo-Bar/item/517/
      */
@@ -72,10 +70,9 @@ class CMSEditLinkAPI
 
         $overWrites = Config::inst()->get(self::class, 'overwrites');
 
-        if (!$modelAdminURLOverwrite && $objectOrClassName instanceof DataObject) {
+        if (! $modelAdminURLOverwrite && $objectOrClassName instanceof DataObject) {
             $modelAdminURLOverwrite = $overWrites[$objectOrClassName->ClassName] ?? '';
         }
-
 
         $MyModelAdminClassObject = null;
         $classFound = false;
@@ -138,7 +135,7 @@ class CMSEditLinkAPI
     public static function get_model_admin(string $modelNameToEdit): array
     {
         $originalModelNameToEdit = $modelNameToEdit;
-        if (!isset(self::$_cache[$originalModelNameToEdit])) {
+        if (! isset(self::$_cache[$originalModelNameToEdit])) {
             $classFound = false;
             self::$_cache[$originalModelNameToEdit] = [];
             $myAdminClassName = Config::inst()->get($modelNameToEdit, 'primary_model_admin_class');
@@ -158,9 +155,7 @@ class CMSEditLinkAPI
                     }
                     $MyModelAdminClassObject = Injector::inst()->get($myAdminClassName);
                     $models = $MyModelAdminClassObject->getManagedModels();
-                    foreach ([false, true,] as $testSubClasses) {
-
-
+                    foreach ([false, true] as $testSubClasses) {
                         foreach ($models as $modelToTest => $modelToTestDetails) {
                             if (is_string($modelToTestDetails)) {
                                 $modelToTest = $modelToTestDetails;
