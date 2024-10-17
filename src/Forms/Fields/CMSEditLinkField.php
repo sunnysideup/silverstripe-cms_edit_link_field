@@ -75,6 +75,7 @@ class CMSEditLinkField extends HTMLReadonlyField
 
     protected function findLabelDescription($linkedObject, string $methodOrVariable): string
     {
+        $description = '';
         if ($linkedObject->hasMethod($methodOrVariable)) {
             $description = $linkedObject->{$methodOrVariable}();
         } elseif (isset($linkedObject->{$methodOrVariable})) {
