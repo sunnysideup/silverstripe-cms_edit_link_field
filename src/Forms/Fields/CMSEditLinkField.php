@@ -77,9 +77,9 @@ class CMSEditLinkField extends HTMLReadonlyField
     {
         $description = '';
         if ($linkedObject->hasMethod($methodOrVariable)) {
-            $description = $linkedObject->{$methodOrVariable}();
+            $description = (string) $linkedObject->{$methodOrVariable}();
         } elseif (isset($linkedObject->{$methodOrVariable})) {
-            $description = $linkedObject->{$methodOrVariable};
+            $description = (string) $linkedObject->{$methodOrVariable};
         } else {
             $description = 'ERROR!';
             user_error($methodOrVariable . ' does not exist on ' . $linkedObject . ' (as method or variable)');
