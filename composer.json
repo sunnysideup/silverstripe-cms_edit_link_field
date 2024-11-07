@@ -1,7 +1,7 @@
 {
     "name": "sunnysideup/cms_edit_link_field",
     "type": "silverstripe-vendormodule",
-    "description": "Adds EDIT IN CMS link to any object within the Silverstripe CMS",
+    "description": "Adds EDIT IN CMS link to any object within the Silverstripe CMS.",
     "keywords": [
         "Silverstripe-CMS",
         "CMS",
