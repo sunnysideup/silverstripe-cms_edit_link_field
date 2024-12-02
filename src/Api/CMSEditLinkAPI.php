@@ -32,8 +32,18 @@ class CMSEditLinkAPI
 
     public static function find_add_link_for_object($objectOrClassName, ?string $action = '', ?string $modelAdminURLOverwrite = ''): string
     {
+        $modelAdminDetails = self::get_model_admin($objectOrClassName);
+        $modelAdmin = $modelAdminDetails['MyModelAdminClassObject'];
+        if ($modelAdmin) {
+            return $modelAdmin->getLinkForModelClass($objectOrClassName, $action);
+        }
+        return '404-no-cms-list-found';
+    }
+
+    public static function find_list_link_for_object($objectOrClassName, ?string $action = '', ?string $modelAdminURLOverwrite = ''): string
+    {
         $link = self::find_edit_link_for_object($objectOrClassName, $action, $modelAdminURLOverwrite);
-        return preg_replace('#/item/\d+#', '/item/new', $link);
+        return preg_replace('#/item/\d+#', '', $link);
     }
 
     /**
