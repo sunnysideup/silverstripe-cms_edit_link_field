@@ -171,8 +171,9 @@ class CMSEditLinkAPI
                         foreach ($models as $modelToTest => $modelToTestDetails) {
                             if (is_string($modelToTestDetails)) {
                                 $modelToTest = $modelToTestDetails;
+                            } else {
+                                $modelToTest = $modelToTestDetails['dataClass'] ?? $modelToTest;
                             }
-
                             $subClassesForModelBeingManaged = null;
                             $modelsToSearch = [];
                             if ($testSubClasses) {
