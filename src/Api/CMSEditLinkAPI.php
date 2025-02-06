@@ -74,10 +74,20 @@ class CMSEditLinkAPI
         }
 
         if ($objectToEdit instanceof Member || $objectToEdit instanceof Group) {
-            return Controller::join_links(
-                Director::baseURL(),
-                Injector::inst()->get(SecurityAdmin::class)->getCMSEditLinkForManagedDataObject($objectToEdit)
-            );
+            $securityAdmin = Injector::inst()->get(SecurityAdmin::class);
+            if ($securityAdmin->hasMethod('getCMSEditLinkForManagedDataObject')) {
+                return Controller::join_links(
+                    Director::baseURL(),
+                    $securityAdmin->getCMSEditLinkForManagedDataObject($objectToEdit)
+                );
+            } else {
+                $modeAdmin = ModelAdmin::singleton();
+                $name = $objectToEdit->ClassName === Member::class ? 'Members' : 'Groups';
+                return Controller::join_links(
+                    Director::baseURL(),
+                    'admin/security/EditForm/field/' . $name . '/item/' . $objectToEdit->ID . '/edit'
+                );
+            }
         }
 
         $overWrites = Config::inst()->get(self::class, 'overwrites');
