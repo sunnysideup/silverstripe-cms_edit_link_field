@@ -179,11 +179,7 @@ class CMSEditLinkAPI
                     $models = $MyModelAdminClassObject->getManagedModels();
                     foreach ([false, true] as $testSubClasses) {
                         foreach ($models as $modelToTest => $modelToTestDetails) {
-                            if (is_string($modelToTestDetails)) {
-                                $modelToTest = $modelToTestDetails;
-                            } else {
-                                $modelToTest = $modelToTestDetails['dataClass'] ?? $modelToTest;
-                            }
+                            $modelToTest = is_string($modelToTestDetails) ? $modelToTestDetails : $modelToTestDetails['dataClass'] ?? $modelToTest;
                             $subClassesForModelBeingManaged = null;
                             $modelsToSearch = [];
                             if ($testSubClasses) {
