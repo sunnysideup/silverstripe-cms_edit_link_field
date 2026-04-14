@@ -39,6 +39,7 @@ class CMSEditLinkAPI
         } else {
             user_error('No model admin found for ' . $objectOrClassName, E_USER_NOTICE);
         }
+
         return '404-no-cms-list-found';
     }
 
@@ -175,6 +176,7 @@ class CMSEditLinkAPI
                     if (ClassInfo::classImplements($myAdminClassName, TestOnly::class)) {
                         continue;
                     }
+
                     $MyModelAdminClassObject = Injector::inst()->get($myAdminClassName);
                     $models = $MyModelAdminClassObject->getManagedModels();
                     foreach ([false, true] as $testSubClasses) {
