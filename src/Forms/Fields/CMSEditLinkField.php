@@ -60,8 +60,9 @@ class CMSEditLinkField extends HTMLReadonlyField
         return $this;
     }
 
-    protected function findLink($linkedObject): string
+    protected function findLink($linkedObject): ?string
     {
+        $link = null;
         if ($linkedObject->hasMethod('CMSEditLink')) {
             $link = $linkedObject->CMSEditLink();
         } elseif ($linkedObject->hasMethod('getCMSEditLink')) {
@@ -73,9 +74,9 @@ class CMSEditLinkField extends HTMLReadonlyField
         return $link;
     }
 
-    protected function findLabelDescription($linkedObject, string $methodOrVariable): string
+    protected function findLabelDescription($linkedObject, string $methodOrVariable): ?string
     {
-        $description = '';
+        $description = null;
         if ($linkedObject->hasMethod($methodOrVariable)) {
             $description = (string) $linkedObject->{$methodOrVariable}();
         } elseif (isset($linkedObject->{$methodOrVariable})) {
