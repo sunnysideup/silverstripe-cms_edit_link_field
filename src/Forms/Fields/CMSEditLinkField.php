@@ -43,7 +43,7 @@ class CMSEditLinkField extends HTMLReadonlyField
         if ($linkedObject && $linkedObject->exists()) {
             $link = $this->findLink($linkedObject);
             $description = $this->findLabelDescription($linkedObject, $methodOrVariable);
-            $content = '<p class="cms-edit-link"><a href="' . $link . '" target="_blank">' . Convert::raw2xml($description) . '</a></p>';
+            $content = '<button class="cms-edit-link btn btn-outline-secondary btn-sm edit"><a href="' . $link . '" target="_blank">' . Convert::raw2xml($description) . '</a></button>';
 
             parent::__construct($name, $title, $content);
         } else {
