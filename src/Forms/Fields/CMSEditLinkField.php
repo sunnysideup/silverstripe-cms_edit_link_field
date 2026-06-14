@@ -5,6 +5,8 @@ namespace Sunnysideup\CmsEditLinkField\Forms\Fields;
 use SilverStripe\Core\Convert;
 use SilverStripe\Forms\HTMLReadonlyField;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\Group;
+use SilverStripe\Security\Member;
 use Sunnysideup\CmsEditLinkField\Api\CMSEditLinkAPI;
 
 /**
@@ -69,6 +71,15 @@ class CMSEditLinkField extends HTMLReadonlyField
             $link = $linkedObject->getCMSEditLink();
         } else {
             $link = CMSEditLinkAPI::find_edit_link_for_object($linkedObject);
+        }
+        if (! $link) {
+            if ($linkedObject instanceof Member) {
+                return '/admin/security/users/EditForm/field/users/item/' . $linkedObject->ID;
+            } elseif ($linkedObject instanceof Group) {
+                return '/admin/security/groups/EditForm/field/groups/item/' . $linkedObject->ID;
+            } elseif ($linkedObject->hasMethod('Link')) {
+                return $linkedObject->Link();
+            }
         }
 
         return $link;
