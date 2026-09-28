@@ -42,15 +42,16 @@ class CMSEditLinkField extends HTMLReadonlyField
         $name .= $this->nameAppendix;
         if ($linkedObject && $linkedObject->exists()) {
             $link = $this->findLink($linkedObject);
-            $description = $this->findLabelDescription($linkedObject, $methodOrVariable);
-            $content = '<button class="cms-edit-link btn btn-outline-secondary btn-sm edit"><a href="' . $link . '" target="_blank">' . Convert::raw2xml($description) . '</a></button>';
+            if ($link) {
+                $description = $this->findLabelDescription($linkedObject, $methodOrVariable);
+                $content = '<button class="cms-edit-link btn btn-outline-secondary btn-sm edit"><a href="' . $link . '" target="_blank">' . Convert::raw2xml($description) . '</a></button>';
 
-            parent::__construct($name, $title, $content);
-        } else {
-            $content = _t('CMSEditLinkField.NONE', '(none)');
-
-            parent::__construct($name, $title, $content);
+                parent::__construct($name, $title, $content);
+            }
         }
+        $content = _t('CMSEditLinkField.NONE', '(none)');
+
+        parent::__construct($name, $title, $content);
     }
 
     public function setNameAppendix(string $s)
@@ -60,8 +61,9 @@ class CMSEditLinkField extends HTMLReadonlyField
         return $this;
     }
 
-    protected function findLink($linkedObject): string
+    protected function findLink($linkedObject): ?string
     {
+        $link = null;
         if ($linkedObject->hasMethod('CMSEditLink')) {
             $link = $linkedObject->CMSEditLink();
         } elseif ($linkedObject->hasMethod('getCMSEditLink')) {
