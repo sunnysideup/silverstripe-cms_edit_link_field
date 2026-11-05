@@ -40,17 +40,16 @@ class CMSEditLinkField extends HTMLReadonlyField
     public function __construct(string $name, string $title, $linkedObject, ?string $methodOrVariable = 'getTitle')
     {
         $name .= $this->nameAppendix;
+        $content = _t('CMSEditLinkField.NONE', '(none)');
         if ($linkedObject && $linkedObject->exists()) {
             $link = $this->findLink($linkedObject);
             if ($link) {
                 $description = $this->findLabelDescription($linkedObject, $methodOrVariable);
                 $content = '<button class="cms-edit-link btn btn-outline-secondary btn-sm edit"><a href="' . $link . '" target="_blank">' . Convert::raw2xml($description) . '</a></button>';
-
-                parent::__construct($name, $title, $content);
             }
         }
-        $content = _t('CMSEditLinkField.NONE', '(none)');
 
+        // only once: calling the parent constructor a second time (with "(none)") replaced the link.
         parent::__construct($name, $title, $content);
     }
 
