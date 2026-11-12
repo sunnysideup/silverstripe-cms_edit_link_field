@@ -82,7 +82,6 @@ class CMSEditLinkAPI
                     $securityAdmin->getCMSEditLinkForManagedDataObject($objectToEdit)
                 );
             } else {
-                $modeAdmin = ModelAdmin::singleton();
                 $name = $objectToEdit->ClassName === Member::class ? 'Members' : 'Groups';
                 return Controller::join_links(
                     Director::baseURL(),
